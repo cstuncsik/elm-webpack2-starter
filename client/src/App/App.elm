@@ -1,23 +1,16 @@
 module App exposing (..)
-import Html exposing (beginnerProgram, div, button, text)
+import Html exposing (Html, beginnerProgram, div, button, text)
 import Html.Events exposing (onClick)
 
+type alias Model = Int
 
-main =
-  beginnerProgram { model = 0, view = view, update = update }
-
-
-view model =
-  div []
-    [ button [ onClick Decrement ] [ text "-" ]
-    , div [] [ text (toString model) ]
-    , button [ onClick Increment ] [ text "+" ]
-    ]
-
+model : Model
+model =
+  0
 
 type Msg = Increment | Decrement
 
-
+update : Msg -> Model -> Model
 update msg model =
   case msg of
     Increment ->
@@ -25,3 +18,15 @@ update msg model =
 
     Decrement ->
       model - 1
+
+view : Model -> Html Msg
+view model =
+  div []
+    [ button [ onClick Decrement ] [ text "-" ]
+    , div [] [ text (toString model) ]
+    , button [ onClick Increment ] [ text "+" ]
+    ]
+
+main : Program Never Model Msg
+main =
+  beginnerProgram { model = model, view = view, update = update }
