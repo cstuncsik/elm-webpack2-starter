@@ -1,30 +1,36 @@
+import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 export default {
   entry: {
-    app: './client/src/app/app.elm'
-  },
-  output: {
-    publicPath: '/',
-    library: 'Elm',
-    libraryTarget: 'var'
+    app: './client/src/index.js'
   },
   module: {
     rules: [
       {
+        test: /\.js$/,
+        use: 'babel-loader'
+      },
+      {
         test: /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/],
-        use: 'elm-webpack-loader'
+        use: {
+          loader: 'elm-webpack-loader',
+          options: {
+            verbose: true,
+            warn: true
+          }
+        }
       }
-    ]
+    ],
+    noParse: /\.elm$/
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({
-      template: './client/src/index.html',
-      inject: 'head'
+      template: './client/src/index.html'
     })
   ],
   devtool: 'eval',
@@ -32,6 +38,7 @@ export default {
     contentBase: './client/src/',
     inline: true,
     hot: true,
-    historyApiFallback: true
+    historyApiFallback: true,
+    open: true
   }
 };
